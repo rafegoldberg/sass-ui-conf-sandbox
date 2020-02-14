@@ -1,0 +1,30 @@
+@import './map/_glob';
+
+$__config__: () !global;
+
+@function get-deep-map($keys...) {
+  @if map-deep-has-keys($__config__, $keys...) {
+    @return map-deep-get($__config__, $keys...);
+  }
+
+  @else {
+    @debug 'no match for #{$keys}';
+    @return false;
+  }
+}
+
+@function set($key, $obj) {
+  $__config__: map-merge($__config__, ($key:$obj)) !global;
+  @return $obj;
+}
+
+@function get($keys: false , $i: false) {
+  @if not $keys { @return $__config__ }
+
+  $val: get-deep-map($keys...);
+  @if $i {
+    $val: nth($val, $i);
+  }
+
+  @return $val;
+}

@@ -1,0 +1,49 @@
+$ui: (
+  text: #333,
+) !default;
+
+@mixin ui($ui: $ui, $setVars: false) {
+  $ui: $ui !global;
+  @if $setVars {
+    @each $key, $val in $ui {
+      @if type-of($val)=='map' or type-of($val)=='list' {
+        $n: 0;
+        @each $subkey, $subval in $val {
+          $n: $n + 1;
+          @if $subval {
+            --ui-#{$key}-#{$subkey}: #{$subval};
+          }
+          @else {
+            --ui-#{$key}-#{$n}: #{$subkey};
+          }
+        }
+      }
+      @else {
+        --ui-#{$key}: #{$val};
+      }
+    }
+  }
+}
+
+@function ui($var, $key: false){
+  // set initial fallback value
+  $fallback: map-get($ui, $var);
+
+  //"smart" update fallback value
+  @if $key and map-has-key($ui, $key) {
+    $fallback: map-get($ui, $key);
+  }
+  @else if $key {
+    $fallback: $key;
+  }
+
+  // update variable value
+  @if map-has-key($ui, $var) {
+    $var: --ui-#{$var};
+  }
+
+  // format --vars list
+  $list: join((), ($var, $fallback), comma);
+  
+  @return var($list);
+}

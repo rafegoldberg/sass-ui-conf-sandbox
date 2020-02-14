@@ -1,0 +1,46 @@
+@import './styles/config';
+@import './styles/ui';
+
+$grays: set(gray, (#384248 #666666 #667283 #939EAE #F8F8F8));
+
+$colors: set(color, (
+  'slate': nth(get(gray), 1),
+  'blue': #118CFD,
+  'green': #12CA93,
+  'red': #E95F6A,
+  'yellow': #F7C543,
+  'purple': #8470BE,
+  'shale': #939EAE,
+  'chalk': mix(get(gray, -1), get(gray, -1)),
+  'light': #F8F8F8,
+));
+
+$combos: set(combo, (
+  'dark': (get(color 'light'), get(color 'shale')),
+));
+
+* {
+  color: inherit;
+}
+
+:root {
+  @include ui(get(), SETVARS);
+}
+
+html {
+  font-family: sans-serif;
+  color: var(--ui-color-slate);
+  background: linear-gradient(to top right, var(--ui-combo-dark));
+
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  margin: 0;
+}
